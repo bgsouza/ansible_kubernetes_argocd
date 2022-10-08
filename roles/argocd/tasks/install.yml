@@ -1,5 +1,8 @@
 ---
 
+- name: Depencencies INSTALL | openshift
+  import_tasks: pip.yml
+
 - name: ARGOCD INSTALL | Deploy namespace
   import_tasks: namespace.yml
 
@@ -7,6 +10,7 @@
   import_tasks: kubernetes.yml
 
 - name: ARGOCD INSTALL | Patch WebUI service
+  become_user: ubuntu
   shell: "kubectl patch svc argocd-server -n {{ argocd_k8s_namespace }} -p '{\"spec\": {\"type\": \"{{ argocd_k8s_service_type }}\"}}'"
   run_once: yes
 
@@ -14,8 +18,7 @@
   get_url:
     url: "{{ argocd_cli_url }}"
     dest: "{{ argocd_cli_path }}"
-    owner: root
-    group: root
+    owner: ubuntu
     mode: 0755
 
 # - name: ARGOCD INSTALL | Manage admin user

@@ -1,0 +1,10 @@
+- name: Install pip
+  apt:
+    name: python3-pip
+    update_cache: yes
+    state: present
+
+- name: Install openshit package for enable k8s module
+  ansible.builtin.pip:
+    name:
+      - openshift
